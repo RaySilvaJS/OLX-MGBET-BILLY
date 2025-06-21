@@ -393,7 +393,7 @@ app.get("/api/vendas", (req, res) => {
 app.get("/api/termos", (req, res) => {
   res.json({
     titulo: "Termos de Uso da OLX Brasil",
-    atualizado: "01/04/2023",
+    atualizado: "01/04/2025",
     conteudo: "Este documento apresenta os termos e condições gerais...",
   });
 });
@@ -402,7 +402,7 @@ app.get("/api/termos", (req, res) => {
 app.get("/api/privacidade", (req, res) => {
   res.json({
     titulo: "Política de Privacidade da OLX Brasil",
-    atualizado: "01/04/2023",
+    atualizado: "01/04/2025",
     conteudo: "A OLX Brasil está comprometida em proteger sua privacidade...",
   });
 });
