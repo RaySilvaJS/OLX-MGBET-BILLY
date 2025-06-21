@@ -554,17 +554,18 @@ const qrcodePagamentos = require('./js/qrcodepagamentos');
 app.get("/api/gerar-qrcode-pix", async (req, res) => {
   try {
     console.log("Gerando QR Code PIX...");
-    const resultado = await qrcodePagamentos.gerarQRCode();
+    const resultado = await qrcodePagamentos();
     
     if (!resultado || !resultado.imgBase64) {
       console.error("Erro ao gerar QR Code PIX: Resultado inválido");
       return res.status(500).json({
         success: false,
         message: "Não foi possível gerar o QR Code PIX",
-        resultado
+        resultado: resultado
       });
     }
     
+    console.log("QR Code gerado com sucesso!");
     res.json({
       success: true,
       qrCodeBase64: resultado.imgBase64,
