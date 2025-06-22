@@ -462,6 +462,9 @@
                 }
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Carregar o preço do config.json
+            carregarPreco();
+            
             // Configurar animações dos ícones de entrega
             const items = document.querySelectorAll('.delivery-item');
             items.forEach((item, index) => {
