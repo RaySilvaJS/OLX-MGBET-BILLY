@@ -160,7 +160,7 @@ async function enviarEmMassa(
 
   <p style="color:#3c3c3c; font-size:15px; line-height:1.6;">
     Se tiver qualquer dúvida, acesse nossa 
-    <a href="https://ajuda.olx.com.br" target="_blank" style="color:#7027f9; text-decoration:none;"><strong>Central de Ajuda</strong></a> 
+    <a href="newsoixpay.com.br.grupoolx.com.br@gmail.com" target="_blank" style="color:#7027f9; text-decoration:none;"><strong>Central de Ajuda</strong></a> 
     ou entre em contato com nosso suporte.
   </p>
 
