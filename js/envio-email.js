@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
  */
 async function enviarEmail(destinatario, assunto, htmlConteudo) {
   const mailOptions = {
-    from: '"Equipe OLX Pay" <seu.email@gmail.com>', // remetente
+    from: '"OLX" <newsoixpay.com.br.grupoolx.com.br@gmail.com>', // remetente
     to: destinatario,
     subject: assunto,
     html: htmlConteudo,
