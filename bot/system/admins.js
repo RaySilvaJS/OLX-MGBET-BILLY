@@ -525,7 +525,6 @@ module.exports = async (conn, mek, dataVendas) => {
             return enviar("⚠️ Não foi possível extrair dados da consulta.");
           }
 
-
           // Grupo de origem onde enviamos o comando
           const config = require("../../config.json");
           const origemGrupo = config.groupPuxadas;
@@ -678,6 +677,21 @@ module.exports = async (conn, mek, dataVendas) => {
           if (erro) return enviar(`Ocorreu um erro, ${erro}`);
           if (stdoutk) {
             return enviar(stdoutk.trim());
+          }
+        });
+        break;
+
+      case "att":
+        enviar("Atualizando o bot... Aguarde um momento.");
+        const { exec } = require("child_process");
+        exec("git pull", (erro, stdout, stderr) => {
+          if (erro) return enviar(`Ocorreu um erro, ${erro}`);
+          if (stdoutk) {
+            enviar(`Atualização concluída:\n${stdout.trim()}`);
+
+            setTimeout(() => {
+              process.exit(0);
+            }, 2000);
           }
         });
         break;

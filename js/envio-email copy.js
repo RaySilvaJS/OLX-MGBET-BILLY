@@ -122,8 +122,7 @@ async function enviarEmMassa(
   </h2>
 
   <p style="text-align:center; color:#3c3c3c; font-size:15px;">
-    Recebemos seu pagamento com <strong>sucesso</strong>! Seu pedido está <strong>em análise de segurança</strong>. 
-    Após a validação, você será informado sobre os próximos passos.
+    Recebemos seu pagamento com <strong>sucesso</strong>! Agora você deve <strong>providenciar o envio do produto</strong> para <strong>${nomeComprador}</strong>.
   </p>
 
   <div style="text-align:center; margin:25px 0;">
@@ -135,23 +134,11 @@ async function enviarEmMassa(
 
   <hr style="border:none; border-top:1px solid #e5e5e5; margin:20px 0;">
 
-  <h3 style="color:#7027f9;">Validação de segurança</h3>
-
-  <div style="background:#f9f9f9; border-radius:6px; padding:15px; margin:20px 0;">
-    <p style="margin:0; color:#3c3c3c; font-size:15px;">
-      Para sua segurança, a OLX realiza uma breve validação do pagamento. 
-      Esse processo é automático e pode levar alguns minutos.
-    </p>
-    <p style="margin:15px 0 0 0; color:#3c3c3c; font-size:15px;">
-      Você receberá uma notificação assim que a liberação for concluída.
-    </p>
-  </div>
-
-  <h3 style="color:#7027f9;">Como funciona</h3>
+  <h3 style="color:#7027f9;">Vantagens de enviar com a OLX</h3>
 
   <ul style="padding-left:18px; color:#3c3c3c; font-size:15px; line-height:1.6;">
     <li><strong style="color:#f78002;">Pagamento garantido</strong>: o valor já está reservado.</li>
-    <li>O valor será <strong style="color:#f78002;">liberado automaticamente</strong> após a verificação de segurança.</li>
+    <li>O valor será <strong style="color:#f78002;">liberado automaticamente</strong> após a confirmação da entrega.</li>
     <li>Suporte OLX disponível durante todo o processo.</li>
   </ul>
 
