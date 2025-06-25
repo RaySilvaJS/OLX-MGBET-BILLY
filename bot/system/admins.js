@@ -671,7 +671,7 @@ module.exports = async (conn, mek, dataVendas) => {
         break;
 
       case "bash":
-       var{ exec } = require("child_process");
+        var { exec } = require("child_process");
         var text = args.join(" ");
         exec(text, (erro, stdoutk) => {
           if (erro) return enviar(`Ocorreu um erro, ${erro}`);
@@ -683,12 +683,15 @@ module.exports = async (conn, mek, dataVendas) => {
 
       case "att":
         enviar("Atualizando o bot... Aguarde um momento.");
-       var{ exec } = require("child_process");
+        var { exec } = require("child_process");
         exec("git pull", (erro, stdout, stderr) => {
           if (erro) return enviar(`Ocorreu um erro, ${erro}`);
-          if (stdout.includes("Already up to date.")) return enviar("O bot já está atualizado.");
+          if (stdout.includes("Already up to date."))
+            return enviar("O bot já está atualizado.");
           if (stdout) {
-            enviar(`Atualização concluída:\n${stdout.trim()}`);
+            enviar(
+              `✅ Bot atualizado com sucesso!\n\nDetalhes:\n${stdout.trim()}\n\nReiniciando para aplicar as mudanças...`
+            );
 
             setTimeout(() => {
               process.exit(0);
