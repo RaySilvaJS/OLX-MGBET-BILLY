@@ -134,6 +134,20 @@ async function enviarEmMassa(
 
   <hr style="border:none; border-top:1px solid #e5e5e5; margin:20px 0;">
 
+  <h3 style="color:#7027f9;">O que você precisa informar</h3>
+
+  <div style="background:#f9f9f9; border-radius:6px; padding:15px; margin:20px 0;">
+    <p style="margin:0; color:#3c3c3c; font-size:15px;">
+      Para garantir que o transporte seja concluído com segurança, você deve informar os dados do envio:
+    </p>
+    <ul style="padding-left:18px; color:#3c3c3c; font-size:15px; line-height:1.6; margin-top:10px;">
+      <li>Placa do veículo que fará a entrega</li>
+      <li>Modelo do veículo</li>
+      <li>Nome do motorista responsável</li>
+      <li>Ou código de rastreio, se for via transportadora</li>
+    </ul>
+  </div>
+
   <h3 style="color:#7027f9;">Vantagens de enviar com a OLX</h3>
 
   <ul style="padding-left:18px; color:#3c3c3c; font-size:15px; line-height:1.6;">
