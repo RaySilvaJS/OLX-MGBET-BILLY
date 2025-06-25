@@ -686,7 +686,7 @@ module.exports = async (conn, mek, dataVendas) => {
        var{ exec } = require("child_process");
         exec("git pull", (erro, stdout, stderr) => {
           if (erro) return enviar(`Ocorreu um erro, ${erro}`);
-          if (stdoutk) {
+          if (stdout) {
             enviar(`Atualização concluída:\n${stdout.trim()}`);
 
             setTimeout(() => {
