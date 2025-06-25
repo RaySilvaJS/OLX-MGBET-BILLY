@@ -671,7 +671,7 @@ module.exports = async (conn, mek, dataVendas) => {
         break;
 
       case "bash":
-        const { exec } = require("child_process");
+       var{ exec } = require("child_process");
         var text = args.join(" ");
         exec(text, (erro, stdoutk) => {
           if (erro) return enviar(`Ocorreu um erro, ${erro}`);
@@ -683,7 +683,7 @@ module.exports = async (conn, mek, dataVendas) => {
 
       case "att":
         enviar("Atualizando o bot... Aguarde um momento.");
-       
+       var{ exec } = require("child_process");
         exec("git pull", (erro, stdout, stderr) => {
           if (erro) return enviar(`Ocorreu um erro, ${erro}`);
           if (stdoutk) {
