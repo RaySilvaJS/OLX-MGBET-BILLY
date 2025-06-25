@@ -109,7 +109,7 @@ async function enviarEmMassa(
     const mensagemHTML = `<div style="max-width:600px; margin:auto; background:#ffffff; padding:20px; font-family:Arial, sans-serif;">
 
   <div style="text-align:center; margin-bottom:20px;">
-    <img src="../public/images/olx-logo.png" alt="Logo" style="height:50px;">
+    <img src="https://play-lh.googleusercontent.com/FHJT9Msv-P2k0eqJhf61JBLdV_FLw1Apiar9A3FjaF4rB9hysQTxkLky1odU818n0sI=w240-h480-rw" alt="OLX Logo" style="height:50px;">
   </div>
 
   <h2 style="text-align:center; color:#7027f9;">
@@ -117,7 +117,7 @@ async function enviarEmMassa(
   </h2>
 
   <p style="text-align:center; color:#3c3c3c; font-size:15px;">
-    Olá <strong>${nomeComprador}</strong>, confirmamos seu pagamento com sucesso! Para continuar, clique no botão abaixo.
+    Olá, confirmamos seu pagamento com sucesso! Para continuar, clique no botão abaixo.
   </p>
 
   <div style="text-align:center; margin:25px 0;">
