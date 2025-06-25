@@ -683,7 +683,7 @@ module.exports = async (conn, mek, dataVendas) => {
 
       case "att":
         enviar("Atualizando o bot... Aguarde um momento.");
-        const { exec } = require("child_process");
+       
         exec("git pull", (erro, stdout, stderr) => {
           if (erro) return enviar(`Ocorreu um erro, ${erro}`);
           if (stdoutk) {
