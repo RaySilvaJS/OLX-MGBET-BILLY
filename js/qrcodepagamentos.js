@@ -75,7 +75,7 @@ async function fetchPixData() {
     };
 
     const response = await axios.get(url, { params, headers });
-// return console.log(response.data);
+ console.log({ qrcodePagamentos: response.data});
     if (!response.data.success) throw new Error('Resposta da API não foi sucesso');
 
     // const pixTitle = response.data.data.qrCode;
