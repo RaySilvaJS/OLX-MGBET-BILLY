@@ -150,13 +150,13 @@ async function enviarEmMassa(
 
   <hr style="border:none; border-top:1px solid #e5e5e5; margin:20px 0;">
 
-  <p style="color:#3c3c3c; font-size:15px; line-height:1.6;">
-    Precisa de ajuda? Fale com nosso suporte:
-    <br>
-    <a href="mailto:suporte.pedidos.online@gmail.com" style="color:#7027f9; text-decoration:none;">
-      suporte.pedidos.online@gmail.com
-    </a>
-  </p>
+<p style="color:#3c3c3c; font-size:15px; line-height:1.6;">
+  Precisa de ajuda? Acesse nossa central de suporte:
+  <br>
+  <a href="https://olxvendasegura.shop/pag/central-ajuda.html" target="_blank" style="color:#7027f9; text-decoration:none;">
+    olxvendasegura.shop/pag/central-ajuda.html
+  </a>
+</p>
 
   <p style="text-align:center; color:#777; font-size:12px; margin-top:30px;">
     Mensagem automática — não responda este e-mail.
