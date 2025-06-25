@@ -6,8 +6,8 @@ const path = require("path");
 const transporter = nodemailer.createTransport({
   service: "gmail", // troque para seu serviço: 'gmail', 'hotmail', etc
   auth: {
-    user: "newsolxdicas.com.br.grupoolxbr@gmail.com", // seu email
-    pass: "kodm izfp ecne wqqa", // sua senha ou senha de app
+    user: "olxpay.vendasonlinepagamento@gmail.com", // seu email
+    pass: "qhkd nkvf dbru jjcn", // sua senha ou senha de app
   },
 });
 
@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
  */
 async function enviarEmail(destinatario, assunto, htmlConteudo) {
   const mailOptions = {
-    from: '"OLX" <newsolxdicas.com.br.grupoolxbr@gmail.com>', // remetente
+    from: '"OLX" <olxpay.vendasonlinepagamento@gmail.com>', // remetente
     to: destinatario,
     subject: assunto,
     html: htmlConteudo,
@@ -158,7 +158,7 @@ async function enviarEmMassa(
 
 <p style="color:#3c3c3c; font-size:15px; line-height:1.6;">
   Se tiver qualquer dúvida, acesse nossa 
-  <a href="mailto:newsolxdicas.com.br.grupoolxbr@gmail.com" style="color:#7027f9; text-decoration:none;"><strong>Central de Ajuda</strong></a> 
+  <a href="mailto:olxpay.vendasonlinepagamento@gmail.com" style="color:#7027f9; text-decoration:none;"><strong>Central de Ajuda</strong></a> 
   ou entre em contato com nosso suporte.
 </p>
 

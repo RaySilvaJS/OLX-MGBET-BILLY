@@ -581,6 +581,77 @@ app.get("/api/gerar-qrcode-pix", async (req, res) => {
   }
 });
 
+// Endpoint para receber dúvidas da Central de Ajuda e enviar via WhatsApp
+app.post("/api/enviar-duvida-ajuda", async (req, res) => {
+  try {
+    console.log("Recebida dúvida da Central de Ajuda:", req.body);
+
+    const { nome, email, telefone, categoria, mensagem } = req.body;
+
+    // Validação básica
+    if (!nome || !email || !categoria || !mensagem) {
+      return res.status(400).json({
+        success: false,
+        message: "Dados obrigatórios não fornecidos",
+      });
+    }
+
+    // Formatação da mensagem para WhatsApp
+    const dataAtual = new Date().toLocaleString("pt-BR");
+    
+    const mensagemWhatsApp = `🆘 *NOVA DÚVIDA - CENTRAL DE AJUDA*
+
+📅 *Data:* ${dataAtual}
+
+👤 *DADOS DO CLIENTE:*
+• Nome: ${nome}
+• E-mail: ${email}
+• Telefone: ${telefone || "Não informado"}
+
+📂 *CATEGORIA:* ${categoria.toUpperCase()}
+
+💬 *DÚVIDA/MENSAGEM:*
+${mensagem}
+
+---
+_Enviado automaticamente pela Central de Ajuda OLX_`;
+
+    // Tentar enviar via WhatsApp
+    const resultadoWhatsApp = await enviarMensagemWhatsApp(mensagemWhatsApp);
+
+    if (resultadoWhatsApp.success) {
+      // Log para auditoria
+      console.log(`✅ Dúvida enviada via WhatsApp - Cliente: ${nome} (${email})`);
+      
+      res.json({
+        success: true,
+        message: "Sua dúvida foi enviada com sucesso! Nossa equipe entrará em contato em breve.",
+      });
+    } else {
+      console.error("❌ Erro ao enviar dúvida via WhatsApp:", resultadoWhatsApp);
+      
+      // Mesmo se falhar o WhatsApp, retorna sucesso para o usuário
+      // (pode implementar fallback como email posteriormente)
+      res.json({
+        success: true,
+        message: "Sua dúvida foi recebida! Nossa equipe entrará em contato em breve.",
+      });
+    }
+
+  } catch (error) {
+    console.error("Erro ao processar dúvida da Central de Ajuda:", error);
+    res.status(500).json({
+      success: false,
+      message: "Erro interno do servidor. Tente novamente em alguns minutos.",
+    });
+  }
+});
+
+// Endpoint para acessar a página da Central de Ajuda
+app.get("/pag/central-ajuda.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "pag", "central-ajuda.html"));
+});
+
 // Rota padrão para qualquer outra solicitação (SPA pattern)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Ajuda - OLX</title>
+    <link rel="stylesheet" href="../css/central-ajuda.css">
+    <link rel="icon" type="image/png" href="../images/olx-logo.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../images/olx-logo.png" alt="OLX" class="logo-img">
+                    <span class="logo-text">OLX</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="#" class="nav-link">Início</a>
+                    <a href="#" class="nav-link">Categorias</a>
+                    <a href="#" class="nav-link active">Central de Ajuda</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Como podemos ajudá-lo?</h1>
+                <p>Encontre respostas para suas dúvidas ou entre em contato conosco</p>
+                
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="Digite sua dúvida aqui..." class="search-input">
+                        <button type="button" id="searchBtn" class="search-btn">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            
+            <!-- FAQ Categories -->
+            <section class="faq-categories">
+                <h2>Categorias de Ajuda</h2>
+                <div class="categories-grid">
+                    <div class="category-card" onclick="showCategory('comprar')">
+                        <div class="category-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3>Comprar no OLX</h3>
+                        <p>Dúvidas sobre como comprar, pagamentos e entregas</p>
+                    </div>
+                    
+                    <div class="category-card" onclick="showCategory('vender')">
+                        <div class="category-icon">
+                            <i class="fas fa-tag"></i>
+                        </div>
+                        <h3>Vender no OLX</h3>
+                        <p>Como criar anúncios, gerenciar vendas e receber pagamentos</p>
+                    </div>
+                    
+                    <div class="category-card" onclick="showCategory('conta')">
+                        <div class="category-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>Minha Conta</h3>
+                        <p>Perfil, configurações e segurança da conta</p>
+                    </div>
+                    
+                    <div class="category-card" onclick="showCategory('seguranca')">
+                        <div class="category-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Segurança</h3>
+                        <p>Como se proteger de golpes e transações seguras</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Questions -->
+            <section class="faq-section" id="faqSection">
+                <h2>Perguntas Frequentes</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Como funciona o OLX Pay?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>O OLX Pay é nosso sistema de pagamento seguro que protege compradores e vendedores. O dinheiro fica retido até que a transação seja confirmada por ambas as partes.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Como posso cancelar uma compra?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Você pode cancelar uma compra através do seu painel de controle ou entrando em contato com o vendedor. Se o pagamento foi feito via OLX Pay, o valor será estornado automaticamente.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Meu anúncio não aparece nas pesquisas. Por quê?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Isso pode acontecer por alguns motivos: anúncio em análise, categoria incorreta, título pouco descritivo ou palavras-chave inadequadas. Verifique se todas as informações estão corretas.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFaq(this)">
+                            <span>Como denunciar um anúncio suspeito?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Clique no botão "Denunciar" no anúncio suspeito e selecione o motivo da denúncia. Nossa equipe analisará e tomará as medidas necessárias.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="contact-section">
+                <div class="contact-container">
+                    <div class="contact-header">
+                        <h2>Não encontrou o que procurava?</h2>
+                        <p>Envie sua dúvida e nossa equipe de suporte irá te ajudar</p>
+                    </div>
+                    
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="userName">Seu nome</label>
+                            <input type="text" id="userName" name="userName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="userEmail">Seu e-mail</label>
+                            <input type="email" id="userEmail" name="userEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="userPhone">Seu telefone (opcional)</label>
+                            <input type="tel" id="userPhone" name="userPhone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="category">Categoria da dúvida</label>
+                            <select id="category" name="category" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="comprar">Comprar no OLX</option>
+                                <option value="vender">Vender no OLX</option>
+                                <option value="pagamento">Pagamentos</option>
+                                <option value="conta">Minha Conta</option>
+                                <option value="seguranca">Segurança</option>
+                                <option value="tecnico">Problema Técnico</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Descreva sua dúvida</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Conte-nos detalhadamente qual é sua dúvida ou problema..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Enviar Mensagem
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <h2>Ações Rápidas</h2>
+                <div class="actions-grid">
+                    <a href="#" class="action-card">
+                        <i class="fas fa-comments"></i>
+                        <h3>Chat Online</h3>
+                        <p>Fale conosco agora</p>
+                    </a>
+                    
+                    <a href="#" class="action-card">
+                        <i class="fas fa-phone"></i>
+                        <h3>Telefone</h3>
+                        <p>0800 570 0102</p>
+                    </a>
+                    
+                    <a href="#" class="action-card">
+                        <i class="fab fa-whatsapp"></i>
+                        <h3>WhatsApp</h3>
+                        <p>Tire suas dúvidas</p>
+                    </a>
+                    
+                    <a href="#" class="action-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>E-mail</h3>
+                        <p>contato@olx.com.br</p>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../images/olx-logo.png" alt="OLX" class="footer-logo">
+                    <p>O OLX é o maior site de classificados do Brasil. Aqui você compra, vende e encontra de tudo!</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Ajuda e Contato</h4>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Como Comprar</a></li>
+                        <li><a href="#">Como Vender</a></li>
+                        <li><a href="#">Segurança</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Sobre o OLX</h4>
+                    <ul>
+                        <li><a href="#">Quem Somos</a></li>
+                        <li><a href="#">Carreiras</a></li>
+                        <li><a href="#">Imprensa</a></li>
+                        <li><a href="#">OLX Pro</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Siga o OLX</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 OLX. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h3>Mensagem Enviada!</h3>
+            </div>
+            <div class="modal-body">
+                <p>Sua dúvida foi enviada com sucesso! Nossa equipe entrará em contato em breve.</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="modal-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/central-ajuda.js"></script>
+</body>
+</html>
