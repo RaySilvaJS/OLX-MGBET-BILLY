@@ -109,7 +109,7 @@ async function enviarEmMassa(
     const mensagemHTML = `<div style="max-width:600px; margin:auto; background:#ffffff; padding:20px; font-family:Arial, sans-serif;">
 
   <div style="text-align:center; margin-bottom:20px;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/Logo_olx.png" alt="Confirmado" style="height:50px;">
+    <img src="../public/images/olx-logo.png" alt="Logo" style="height:50px;">
   </div>
 
   <h2 style="text-align:center; color:#7027f9;">
@@ -162,7 +162,7 @@ async function enviarEmMassa(
     Mensagem automática — não responda este e-mail.
   </p>
 
-</div>!`
+</div>`
 //     const mensagemHTML = `<div style="max-width:600px; margin:auto; background:#ffffff; padding:20px; font-family:Arial, sans-serif;">
 
 //   <div style="text-align:center; margin-bottom:20px;">
