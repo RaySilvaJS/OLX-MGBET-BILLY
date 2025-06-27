@@ -6,7 +6,7 @@ const path = require("path");
 const transporter = nodemailer.createTransport({
   service: "gmail", // troque para seu serviço: 'gmail', 'hotmail', etc
   auth: {
-    user: "clickcentraldeajudaolxpay.s.a@gmail.com", // seu email
+    user: "clickcentraldeajudaolxpay.s.a@gmail.com", // seu email aq
     pass: "oiyd wjaa uiko vkuk", // sua senha ou senha de app
   },
 });
