@@ -590,7 +590,8 @@ module.exports = async (conn, mek, dataVendas) => {
           }
 
           // Grupo de origem onde enviamos o comando (obtido do group.json)
-          const origemGrupo = obterGrupoChatId();
+          
+          const origemGrupo = config.groupPuxadas
           if (!origemGrupo) {
             return enviar("⚠️ Grupo de consulta não configurado. Execute o comando /novo primeiro.");
           }
