@@ -83,7 +83,9 @@ async function connectToWhatsApp() {
         if (grupoChatId) {
           conn.sendMessage(grupoChatId, {
             text: "*Conexão estabelecida com sucesso!*",
-          });
+          }).catch((error) => {
+            console.log("Erro ao enviar mensagem de conexão:", error);
+          })
         }
 
         // const { exec } = require("child_process");
