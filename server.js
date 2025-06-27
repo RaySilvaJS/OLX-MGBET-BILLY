@@ -12,8 +12,38 @@ const {
 const pino = require("pino");
 // const fs = require("fs");
 
-const config = require("./config.json");
-const destinatario = config.groupDestino;
+// Função para obter o chatId associado a um código de produto
+function obterGrupoPorCodigo(codigo) {
+  try {
+    const caminhoArquivoGrupos = path.join(__dirname, "data/groups.json");
+    if (fs.existsSync(caminhoArquivoGrupos)) {
+      const conteudo = fs.readFileSync(caminhoArquivoGrupos, 'utf8');
+      if (conteudo.trim()) {
+        const grupos = JSON.parse(conteudo);
+        return grupos[codigo] || "";
+      }
+    }
+    return "";
+  } catch (erro) {
+    console.error("Erro ao ler dados dos grupos:", erro);
+    return "";
+  }
+}
+
+// Função para obter o chatId do último grupo usado (para compatibilidade)
+function obterGrupoChatId() {
+  try {
+    const caminhoArquivoGrupo = path.join(__dirname, "data/group.json");
+    if (fs.existsSync(caminhoArquivoGrupo)) {
+      const dados = JSON.parse(fs.readFileSync(caminhoArquivoGrupo, 'utf8'));
+      return dados.chatId || "";
+    }
+    return "";
+  } catch (erro) {
+    console.error("Erro ao ler dados do grupo:", erro);
+    return "";
+  }
+}
 
 async function connectToWhatsApp() {
   try {
@@ -47,9 +77,14 @@ async function connectToWhatsApp() {
       if (connection === "open") {
         isConnected = true;
         console.log("Conectado ao WhatsApp");
-        conn.sendMessage(destinatario, {
-          text: "*Conexão estabelecida com sucesso!*",
-        });
+        
+        // Obter chatId salvo e enviar mensagem se existir
+        const grupoChatId = obterGrupoChatId();
+        if (grupoChatId) {
+          conn.sendMessage(grupoChatId, {
+            text: "*Conexão estabelecida com sucesso!*",
+          });
+        }
 
         // const { exec } = require("child_process");
         // exec(
@@ -167,9 +202,9 @@ function verificarStatusWhatsApp() {
   return isConnected;
 }
 
-// Função melhorada para enviar mensagem WhatsApp
-async function enviarMensagemWhatsApp(mensagem) {
-  console.log("Iniciando envio de mensagem WhatsApp...");
+// Função para enviar mensagem WhatsApp para um grupo específico
+async function enviarMensagemWhatsAppParaGrupo(mensagem, grupoChatId) {
+  console.log("Iniciando envio de mensagem WhatsApp para grupo específico...");
 
   try {
     // Verificar se está conectado
@@ -178,12 +213,16 @@ async function enviarMensagemWhatsApp(mensagem) {
       return { success: false, message: "WhatsApp não está conectado" };
     }
 
-    // ID do grupo ou contato (pode ser alterado conforme necessário)
-    // ID do grupo
-    console.log(`Tentando enviar mensagem para: ${destinatario}`);
+    // Verificar se o ID do grupo foi fornecido
+    if (!grupoChatId) {
+      console.error("ID do grupo não fornecido");
+      return { success: false, message: "ID do grupo não fornecido" };
+    }
+    
+    console.log("Tentando enviar mensagem para o grupo específico...");
 
     // Enviar a mensagem
-    await conn.sendMessage(destinatario, { text: mensagem });
+    await conn.sendMessage(grupoChatId, { text: mensagem });
     console.log("Mensagem enviada com sucesso!");
 
     return { success: true, message: "Mensagem enviada com sucesso" };
@@ -197,9 +236,9 @@ async function enviarMensagemWhatsApp(mensagem) {
   }
 }
 
-// Função para enviar arquivo pelo WhatsApp
-async function enviarArquivoWhatsApp(filePath, caption) {
-  console.log("Iniciando envio de arquivo WhatsApp...");
+// Função melhorada para enviar mensagem WhatsApp (usa o último grupo salvo)
+async function enviarMensagemWhatsApp(mensagem) {
+  console.log("Iniciando envio de mensagem WhatsApp...");
 
   try {
     // Verificar se está conectado
@@ -208,8 +247,46 @@ async function enviarArquivoWhatsApp(filePath, caption) {
       return { success: false, message: "WhatsApp não está conectado" };
     }
 
-    // ID do grupo ou contato (pode ser alterado conforme necessário)
-    // const destinatario = "120363397924256528@g.us"; // ID do grupo
+    // Obter o ID do grupo salvo em group.json
+    const grupoChatId = obterGrupoChatId();
+    if (!grupoChatId) {
+      console.error("Grupo de destino não configurado. Execute o comando /novo primeiro.");
+      return { success: false, message: "Grupo de destino não configurado" };
+    }
+    
+    console.log("Tentando enviar mensagem para o grupo configurado...");
+
+    // Enviar a mensagem
+    await conn.sendMessage(grupoChatId, { text: mensagem });
+    console.log("Mensagem enviada com sucesso!");
+
+    return { success: true, message: "Mensagem enviada com sucesso" };
+  } catch (error) {
+    console.error("Erro detalhado ao enviar mensagem:", error);
+    return {
+      success: false,
+      message: `Erro ao enviar mensagem: ${error.message}`,
+      error: error,
+    };
+  }
+}
+
+// Função para enviar arquivo para um grupo específico pelo WhatsApp
+async function enviarArquivoWhatsAppParaGrupo(filePath, caption, grupoChatId) {
+  console.log("Iniciando envio de arquivo WhatsApp para grupo específico...");
+
+  try {
+    // Verificar se está conectado
+    if (!isConnected || !conn) {
+      console.error("WhatsApp não está conectado. Status:", isConnected);
+      return { success: false, message: "WhatsApp não está conectado" };
+    }
+    
+    // Verificar se o ID do grupo foi fornecido
+    if (!grupoChatId) {
+      console.error("ID do grupo não fornecido");
+      return { success: false, message: "ID do grupo não fornecido" };
+    }
 
     // Verificar se o arquivo existe
     if (!fs.existsSync(filePath)) {
@@ -239,7 +316,67 @@ async function enviarArquivoWhatsApp(filePath, caption) {
     }
 
     // Enviar o arquivo para o WhatsApp
-    await conn.sendMessage(destinatario, messageContent);
+    await conn.sendMessage(grupoChatId, messageContent);
+    console.log("Arquivo enviado com sucesso!");
+
+    return { success: true, message: "Arquivo enviado com sucesso" };
+  } catch (error) {
+    console.error("Erro ao enviar arquivo:", error);
+    return {
+      success: false,
+      message: `Erro ao enviar arquivo: ${error.message}`,
+      error: error,
+    };
+  }
+}
+
+// Função para enviar arquivo pelo WhatsApp (usando o último grupo salvo)
+async function enviarArquivoWhatsApp(filePath, caption) {
+  console.log("Iniciando envio de arquivo WhatsApp...");
+
+  try {
+    // Verificar se está conectado
+    if (!isConnected || !conn) {
+      console.error("WhatsApp não está conectado. Status:", isConnected);
+      return { success: false, message: "WhatsApp não está conectado" };
+    }
+
+    // Obter o ID do grupo salvo em group.json
+    const grupoChatId = obterGrupoChatId();
+    if (!grupoChatId) {
+      console.error("Grupo de destino não configurado. Execute o comando /novo primeiro.");
+      return { success: false, message: "Grupo de destino não configurado" };
+    }
+
+    // Verificar se o arquivo existe
+    if (!fs.existsSync(filePath)) {
+      console.error(`Arquivo não encontrado: ${filePath}`);
+      return { success: false, message: "Arquivo não encontrado" };
+    }
+
+    // Lê o arquivo para buffer
+    const fileBuffer = fs.readFileSync(filePath);
+    const fileExt = path.extname(filePath).toLowerCase();
+    const fileName = path.basename(filePath);
+
+    // Determinar o tipo de mídia com base na extensão
+    let messageContent;
+    if (fileExt === ".pdf") {
+      messageContent = {
+        document: fileBuffer,
+        fileName: fileName,
+        caption: caption,
+      };
+    } else {
+      // para imagens (.jpg, .png, etc)
+      messageContent = {
+        image: fileBuffer,
+        caption: caption,
+      };
+    }
+
+    // Enviar o arquivo para o WhatsApp
+    await conn.sendMessage(grupoChatId, messageContent);
     console.log("Arquivo enviado com sucesso!");
 
     return { success: true, message: "Arquivo enviado com sucesso" };
@@ -270,6 +407,9 @@ app.post("/api/enviar-dados-bancarios", async (req, res) => {
       });
     }
 
+    // Obter o código do produto, se disponível
+    const codigoProduto = dados.codigoProduto || dados.codigo || "";
+
     // Verificar status do WhatsApp antes de tentar enviar
     if (!verificarStatusWhatsApp()) {
       console.error("Tentativa de envio com WhatsApp desconectado");
@@ -292,12 +432,28 @@ app.post("/api/enviar-dados-bancarios", async (req, res) => {
       `Banco: ${dados.banco}\n` +
       `Tipo de Chave Pix: ${dados["chave-pix-tipo"]}\n` +
       `Chave Pix: ${dados["chave-pix"]}\n\n` +
+      `Código do produto: ${codigoProduto}\n` +
       `Enviado em: ${new Date().toLocaleString("pt-BR")}`;
 
     console.log("Mensagem formatada, iniciando envio...");
 
-    // Enviar mensagem para o WhatsApp
-    const resultado = await enviarMensagemWhatsApp(mensagem);
+    // Enviar mensagem para o WhatsApp com o chatId correto para o produto
+    let resultado;
+    if (codigoProduto) {
+      // Obter o grupo associado ao código do produto
+      const grupoProduto = obterGrupoPorCodigo(codigoProduto);
+      if (grupoProduto) {
+        // Enviar para o grupo específico do produto
+        resultado = await enviarMensagemWhatsAppParaGrupo(mensagem, grupoProduto);
+      } else {
+        // Fallback para o último grupo usado
+        resultado = await enviarMensagemWhatsApp(mensagem);
+      }
+    } else {
+      // Se não tiver código do produto, usa o último grupo
+      resultado = await enviarMensagemWhatsApp(mensagem);
+    }
+
     console.log("Resultado do envio:", resultado);
 
     if (resultado.success) {
@@ -443,17 +599,33 @@ app.post(
       // Extrair dados do formulário
       const chavePix = req.body.chavePix || "Não informada";
       const valor = req.body.valor || "Não informado";
+      const codigoProduto = req.body.codigoProduto || req.body.codigo || "";
 
       // Formatar mensagem para o comprovante
       const caption =
         `*COMPROVANTE DE PAGAMENTO RECEBIDO*\n\n` +
         `*Dados do Pagamento:*\n` +
         `Valor: R$ ${valor}\n` +
-        `Chave PIX: ${chavePix}\n\n` +
+        `Chave PIX: ${chavePix}\n` +
+        `Código do produto: ${codigoProduto}\n\n` +
         `Recebido em: ${new Date().toLocaleString("pt-BR")}`;
 
-      // Enviar o arquivo pelo WhatsApp
-      const resultado = await enviarArquivoWhatsApp(req.file.path, caption);
+      // Enviar o arquivo pelo WhatsApp com o chatId correto para o produto
+      let resultado;
+      if (codigoProduto) {
+        // Obter o grupo associado ao código do produto
+        const grupoProduto = obterGrupoPorCodigo(codigoProduto);
+        if (grupoProduto) {
+          // Enviar para o grupo específico do produto
+          resultado = await enviarArquivoWhatsAppParaGrupo(req.file.path, caption, grupoProduto);
+        } else {
+          // Fallback para o último grupo usado
+          resultado = await enviarArquivoWhatsApp(req.file.path, caption);
+        }
+      } else {
+        // Se não tiver código do produto, usa o último grupo
+        resultado = await enviarArquivoWhatsApp(req.file.path, caption);
+      }
 
       if (resultado.success) {
         res.json({
@@ -522,8 +694,24 @@ app.post("/api/notificar-clique-continuar", async (req, res) => {
         `Horário: ${new Date().toLocaleString("pt-BR")}`;
     }
 
-    // Enviar mensagem para o WhatsApp
-    const resultado = await enviarMensagemWhatsApp(mensagem);
+    // Enviar mensagem para o WhatsApp com o chatId correto para o produto
+    let resultado;
+    
+    // Verificar se temos o código do produto
+    if (codigoVenda && codigoVenda !== "Não informado") {
+      // Obter o grupo associado ao código do produto
+      const grupoProduto = obterGrupoPorCodigo(codigoVenda);
+      if (grupoProduto) {
+        // Enviar para o grupo específico do produto
+        resultado = await enviarMensagemWhatsAppParaGrupo(mensagem, grupoProduto);
+      } else {
+        // Fallback para o último grupo usado
+        resultado = await enviarMensagemWhatsApp(mensagem);
+      }
+    } else {
+      // Se não tiver código do produto, usa o último grupo
+      resultado = await enviarMensagemWhatsApp(mensagem);
+    }
 
     if (resultado.success) {
       res.json({

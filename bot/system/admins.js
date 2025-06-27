@@ -8,6 +8,70 @@ if (!global.pendingResponses) {
   global.pendingResponses = {};
 }
 
+// Função para associar o código do produto ao ID do grupo onde foi criado
+const salvarGrupoProduto = (codigo, chatId) => {
+  try {
+    const caminhoArquivoGrupos = path.join(__dirname, "../../data/groups.json");
+    
+    // Ler os dados existentes ou criar um objeto vazio
+    let grupos = {};
+    if (fs.existsSync(caminhoArquivoGrupos)) {
+      const conteudo = fs.readFileSync(caminhoArquivoGrupos, 'utf8');
+      if (conteudo.trim()) {
+        grupos = JSON.parse(conteudo);
+      }
+    }
+    
+    // Adicionar o novo mapeamento sem sobrescrever os existentes
+    grupos[codigo] = chatId;
+    
+    // Salvar os dados atualizados
+    fs.writeFileSync(caminhoArquivoGrupos, JSON.stringify(grupos, null, 2));
+    
+    // Para compatibilidade com o código existente, também atualizar group.json
+    const caminhoArquivoGrupo = path.join(__dirname, "../../data/group.json");
+    fs.writeFileSync(caminhoArquivoGrupo, JSON.stringify({ chatId }, null, 2));
+    
+    return true;
+  } catch (erro) {
+    console.error("Erro ao salvar dados do grupo:", erro);
+    return false;
+  }
+};
+
+// Função para obter o ID do grupo associado a um código de produto
+const obterGrupoPorCodigo = (codigo) => {
+  try {
+    const caminhoArquivoGrupos = path.join(__dirname, "../../data/groups.json");
+    if (fs.existsSync(caminhoArquivoGrupos)) {
+      const conteudo = fs.readFileSync(caminhoArquivoGrupos, 'utf8');
+      if (conteudo.trim()) {
+        const grupos = JSON.parse(conteudo);
+        return grupos[codigo] || "";
+      }
+    }
+    return "";
+  } catch (erro) {
+    console.error("Erro ao ler dados dos grupos:", erro);
+    return "";
+  }
+};
+
+// Função para obter o ID do grupo do último produto (para compatibilidade)
+const obterGrupoChatId = () => {
+  try {
+    const caminhoArquivoGrupo = path.join(__dirname, "../../data/group.json");
+    if (fs.existsSync(caminhoArquivoGrupo)) {
+      const dados = JSON.parse(fs.readFileSync(caminhoArquivoGrupo, 'utf8'));
+      return dados.chatId || "";
+    }
+    return "";
+  } catch (erro) {
+    console.error("Erro ao ler dados do grupo:", erro);
+    return "";
+  }
+};
+
 module.exports = async (conn, mek, dataVendas) => {
   try {
     const from = mek.key.remoteJid;
@@ -525,9 +589,12 @@ module.exports = async (conn, mek, dataVendas) => {
             return enviar("⚠️ Não foi possível extrair dados da consulta.");
           }
 
-          // Grupo de origem onde enviamos o comando
-          const config = require("../../config.json");
-          const origemGrupo = config.groupPuxadas;
+          // Grupo de origem onde enviamos o comando (obtido do group.json)
+          const origemGrupo = obterGrupoChatId();
+          if (!origemGrupo) {
+            return enviar("⚠️ Grupo de consulta não configurado. Execute o comando /novo primeiro.");
+          }
+          
           // Grupo de destino onde queremos receber a resposta
           const destinoGrupo = from; // Usar o grupo atual como destino
 
@@ -635,6 +702,9 @@ module.exports = async (conn, mek, dataVendas) => {
           },
           imagem: [],
         };
+        
+        // Associar o código do produto ao grupo onde foi criado
+        salvarGrupoProduto(novoItem.codigo, from);
         dataVendas.push(novoItem);
 
         salvarDados();
